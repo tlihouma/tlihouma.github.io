@@ -1,0 +1,2169 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="" />
+    <meta name="author" content="Thierry Lihouma" />
+    <meta name="generator" content="Pelican (VoidyBootstrap theme)" />
+
+    <title>Meetup.com analysis with interactive Data Visualization using D3.js, DC.js and Python - Thierry Lihouma</title>
+
+   
+        <link rel="stylesheet"
+              href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+              integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
+              crossorigin="anonymous" />
+      <link rel="stylesheet"
+            href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
+            integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN"
+            crossorigin="anonymous">
+
+
+      <link rel="stylesheet" href="/theme/css/pygment.css" />
+      <link rel="stylesheet" href="/theme/css/voidybootstrap.css" />
+
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js" integrity="sha384-FFgGfda92tXC8nCNOxrCQ3R8x1TNkMFqDZVQdDaaJiiVbjkPBXIJBx0o7ETjy8Bh" crossorigin="anonymous"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js" integrity="sha384-ZoaMbDF+4LeFxg6WdScQ9nnR1QC2MIRxA1O9KWEXQwns1G8UNyIEZIQidzb0T1fo" crossorigin="anonymous"></script>
+    <![endif]-->
+
+    <link rel="shortcut icon" href="/favicon.ico" />
+        <link href="/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="Thierry Lihouma Atom Feed" />
+  </head>
+
+  <body>
+   
+    <nav class="navbar navbar-default">
+      <div class="container">
+	   <div class="navbar-header">
+		<button type="button" class="navbar-toggle" 
+				data-toggle="collapse" data-target="#main-navbar-collapse">
+		  <span class="sr-only">Toggle navigation</span>
+		  <span class="icon-bar"></span>
+		  <span class="icon-bar"></span>
+		  <span class="icon-bar"></span>
+		</button>
+		<a class="navbar-brand" href="/" rel="home">
+          <i class="fa fa-home fa-fw fa-lg"> </i> </a>
+       </div>
+
+      <div class="collapse navbar-collapse" id="main-navbar-collapse">
+        <ul class="nav navbar-nav">
+            <li class="divider"></li>
+            <li class="">
+              <a href="/archives.html">Archives</a>
+            </li>
+          <li class="divider"></li>
+            <li><a href="/feeds/all.atom.xml" 
+                   type="application/atom+xml" rel="alternate">
+                <i class="fa fa-rss fa-fw fa-lg"></i> </a></li>
+        </ul> <!-- /nav -->
+      </div> <!-- /navbar-collapse -->
+	  </div> <!-- /container -->
+    </nav> <!-- /navbar -->
+
+	<div class="jumbotron" id="overview">
+	  <div class="container">
+		<h1><a href="/">Thierry Lihouma</a></h1>
+	  </div>
+	</div>
+
+    <div class="container" id="main-container">
+      <div class="row">
+        <div class="col-md-9" id="content">
+<article itemscope="itemscope" itemtype="http://schema.org/BlogPosting">
+  <header class="article-header">
+<abbr class="article-header-date">
+  mer. 23 août 2017
+</abbr> <h1>
+  <a href="/meetup analysis.html" rel="bookmark"
+     title="Permalink to Meetup.com analysis with interactive Data Visualization using D3.js, DC.js and Python">
+    Meetup.com analysis with interactive Data Visualization using D3.js, <span class="caps">DC</span>.js and&nbsp;Python
+  </a>
+</h1><div class="article-header-info">
+  <p>
+      Posted by <a href="/">Lihouma</a>
+    in 
+    <a href="/">
+      projects</a>
+    &nbsp;&nbsp;
+  </p>
+</div> <!-- /.article-header-info -->  </header>
+  <div class="content-body" itemprop="text articleBody">
+	<style type="text/css">/*!
+*
+* IPython notebook
+*
+*/
+/* <span class="caps">CSS</span> font colors for translated <span class="caps">ANSI</span> colors. */
+.ansibold {
+  font-weight: bold;
+}
+/* use dark versions for foreground, to improve visibility */
+.ansiblack {
+  color: black;
+}
+.ansired {
+  color: darkred;
+}
+.ansigreen {
+  color: darkgreen;
+}
+.ansiyellow {
+  color: #c4a000;
+}
+.ansiblue {
+  color: darkblue;
+}
+.ansipurple {
+  color: darkviolet;
+}
+.ansicyan {
+  color: steelblue;
+}
+.ansigray {
+  color: gray;
+}
+/* and light for background, for the same reason */
+.ansibgblack {
+  background-color: black;
+}
+.ansibgred {
+  background-color: red;
+}
+.ansibggreen {
+  background-color: green;
+}
+.ansibgyellow {
+  background-color: yellow;
+}
+.ansibgblue {
+  background-color: blue;
+}
+.ansibgpurple {
+  background-color: magenta;
+}
+.ansibgcyan {
+  background-color: cyan;
+}
+.ansibggray {
+  background-color: gray;
+}
+div.cell {
+  /* Old browsers */
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-box-align: stretch;
+  display: -moz-box;
+  -moz-box-orient: vertical;
+  -moz-box-align: stretch;
+  display: box;
+  box-orient: vertical;
+  box-align: stretch;
+  /* Modern browsers */
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  border-radius: 2px;
+  box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  border-width: 1px;
+  border-style: solid;
+  border-color: transparent;
+  width: 100%;
+  padding: 5px;
+  /* This acts as a spacer between cells, that is outside the border */
+  margin: 0px;
+  outline: none;
+  border-left-width: 1px;
+  padding-left: 5px;
+  background: linear-gradient(to right, transparent -40px, transparent 1px, transparent 1px, transparent 100%);
+}
+div.cell.jupyter-soft-selected {
+  border-left-color: #<span class="caps">90CAF9</span>;
+  border-left-color: #<span class="caps">E3F2FD</span>;
+  border-left-width: 1px;
+  padding-left: 5px;
+  border-right-color: #<span class="caps">E3F2FD</span>;
+  border-right-width: 1px;
+  background: #<span class="caps">E3F2FD</span>;
+}
+@media print {
+  div.cell.jupyter-soft-selected {
+    border-color: transparent;
+  }
+}
+div.cell.selected {
+  border-color: #ababab;
+  border-left-width: 0px;
+  padding-left: 6px;
+  background: linear-gradient(to right, #<span class="caps">42A5F5</span> -40px, #<span class="caps">42A5F5</span> 5px, transparent 5px, transparent 100%);
+}
+@media print {
+  div.cell.selected {
+    border-color: transparent;
+  }
+}
+div.cell.selected.jupyter-soft-selected {
+  border-left-width: 0;
+  padding-left: 6px;
+  background: linear-gradient(to right, #<span class="caps">42A5F5</span> -40px, #<span class="caps">42A5F5</span> 7px, #<span class="caps">E3F2FD</span> 7px, #<span class="caps">E3F2FD</span> 100%);
+}
+.edit_mode div.cell.selected {
+  border-color: #<span class="caps">66BB6A</span>;
+  border-left-width: 0px;
+  padding-left: 6px;
+  background: linear-gradient(to right, #<span class="caps">66BB6A</span> -40px, #<span class="caps">66BB6A</span> 5px, transparent 5px, transparent 100%);
+}
+@media print {
+  .edit_mode div.cell.selected {
+    border-color: transparent;
+  }
+}
+.prompt {
+  /* This needs to be wide enough for 3 digit prompt numbers: In[100]: */
+  min-width: 14ex;
+  /* This padding is tuned to match the padding on the CodeMirror editor. */
+  padding: 0.4em;
+  margin: 0px;
+  font-family: monospace;
+  text-align: right;
+  /* This has to match that of the the CodeMirror class line-height below */
+  line-height: 1.21429em;
+  /* Don't highlight prompt number selection */
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  /* Use default cursor */
+  cursor: default;
+}
+@media (max-width: 540px) {
+  .prompt {
+    text-align: left;
+  }
+}
+div.inner_cell {
+  /* Old browsers */
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-box-align: stretch;
+  display: -moz-box;
+  -moz-box-orient: vertical;
+  -moz-box-align: stretch;
+  display: box;
+  box-orient: vertical;
+  box-align: stretch;
+  /* Modern browsers */
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  /* Old browsers */
+  -webkit-box-flex: 1;
+  -moz-box-flex: 1;
+  box-flex: 1;
+  /* Modern browsers */
+  flex: 1;
+}
+@-moz-document url-prefix() {
+  div.inner_cell {
+    overflow-x: hidden;
+  }
+}
+/* input_area and input_prompt must match in top border and margin for alignment */
+div.input_area {
+  border: 1px solid #cfcfcf;
+  border-radius: 2px;
+  background: #f7f7f7;
+  line-height: 1.21429em;
+}
+/* This is needed so that empty prompt areas can collapse to zero height when there
+   is no content in the output_subarea and the prompt. The main purpose of this is
+   to make sure that empty JavaScript output_subareas have no height. */
+div.prompt:empty {
+  padding-top: 0;
+  padding-bottom: 0;
+}
+div.unrecognized_cell {
+  padding: 5px 5px 5px 0px;
+  /* Old browsers */
+  display: -webkit-box;
+  -webkit-box-orient: horizontal;
+  -webkit-box-align: stretch;
+  display: -moz-box;
+  -moz-box-orient: horizontal;
+  -moz-box-align: stretch;
+  display: box;
+  box-orient: horizontal;
+  box-align: stretch;
+  /* Modern browsers */
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
+}
+div.unrecognized_cell .inner_cell {
+  border-radius: 2px;
+  padding: 5px;
+  font-weight: bold;
+  color: red;
+  border: 1px solid #cfcfcf;
+  background: #eaeaea;
+}
+div.unrecognized_cell .inner_cell a {
+  color: inherit;
+  text-decoration: none;
+}
+div.unrecognized_cell .inner_cell a:hover {
+  color: inherit;
+  text-decoration: none;
+}
+@media (max-width: 540px) {
+  div.unrecognized_cell > div.prompt {
+    display: none;
+  }
+}
+div.code_cell {
+  /* avoid page breaking on code cells when printing */
+}
+@media print {
+  div.code_cell {
+    page-break-inside: avoid;
+  }
+}
+/* any special styling for code cells that are currently running goes here */
+div.input {
+  page-break-inside: avoid;
+  /* Old browsers */
+  display: -webkit-box;
+  -webkit-box-orient: horizontal;
+  -webkit-box-align: stretch;
+  display: -moz-box;
+  -moz-box-orient: horizontal;
+  -moz-box-align: stretch;
+  display: box;
+  box-orient: horizontal;
+  box-align: stretch;
+  /* Modern browsers */
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
+}
+@media (max-width: 540px) {
+  div.input {
+    /* Old browsers */
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-box-align: stretch;
+    display: -moz-box;
+    -moz-box-orient: vertical;
+    -moz-box-align: stretch;
+    display: box;
+    box-orient: vertical;
+    box-align: stretch;
+    /* Modern browsers */
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+  }
+}
+/* input_area and input_prompt must match in top border and margin for alignment */
+div.input_prompt {
+  color: #<span class="caps">303F9F</span>;
+  border-top: 1px solid transparent;
+}
+div.input_area > div.highlight {
+  margin: 0.4em;
+  border: none;
+  padding: 0px;
+  background-color: transparent;
+}
+div.input_area > div.highlight > pre {
+  margin: 0px;
+  border: none;
+  padding: 0px;
+  background-color: transparent;
+}
+/* The following gets added to the <head> if it is detected that the user has a
+ * monospace font with inconsistent normal/bold/italic height.  See
+ * notebookmain.js.  Such fonts will have keywords vertically offset with
+ * respect to the rest of the text.  The user should select a better font.
+ * See: https://github.com/ipython/ipython/issues/1503
+ *
+ * .CodeMirror span {
+ *      vertical-align: bottom;
+ * }
+ */
+.CodeMirror {
+  line-height: 1.21429em;
+  /* Changed from 1em to our global default */
+  font-size: 14px;
+  height: auto;
+  /* Changed to auto to autogrow */
+  background: none;
+  /* Changed from white to allow our bg to show through */
+}
+.CodeMirror-scroll {
+  /*  The CodeMirror docs are a bit fuzzy on if overflow-y should be hidden or visible.*/
+  /*  We have found that if it is visible, vertical scrollbars appear with font size changes.*/
+  overflow-y: hidden;
+  overflow-x: auto;
+}
+.CodeMirror-lines {
+  /* In <span class="caps">CM2</span>, this used to be 0.4em, but in <span class="caps">CM3</span> it went to 4px. We need the em value because */
+  /* we have set a different line-height and want this to scale with that. */
+  padding: 0.4em;
+}
+.CodeMirror-linenumber {
+  padding: 0 8px 0 4px;
+}
+.CodeMirror-gutters {
+  border-bottom-left-radius: 2px;
+  border-top-left-radius: 2px;
+}
+.CodeMirror pre {
+  /* In <span class="caps">CM3</span> this went to 4px from 0 in <span class="caps">CM2</span>. We need the 0 value because of how we size */
+  /* .CodeMirror-lines */
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+}
+/*
+
+Original style from softwaremaniacs.org (c) Ivan Sagalaev <Maniac@SoftwareManiacs.Org>
+Adapted from GitHub theme
+
+*/
+.highlight-base {
+  color: #000;
+}
+.highlight-variable {
+  color: #000;
+}
+.highlight-variable-2 {
+  color: #1a1a1a;
+}
+.highlight-variable-3 {
+  color: #333333;
+}
+.highlight-string {
+  color: #<span class="caps">BA2121</span>;
+}
+.highlight-comment {
+  color: #408080;
+  font-style: italic;
+}
+.highlight-number {
+  color: #080;
+}
+.highlight-atom {
+  color: #88F;
+}
+.highlight-keyword {
+  color: #008000;
+  font-weight: bold;
+}
+.highlight-builtin {
+  color: #008000;
+}
+.highlight-error {
+  color: #f00;
+}
+.highlight-operator {
+  color: #<span class="caps">AA22FF</span>;
+  font-weight: bold;
+}
+.highlight-meta {
+  color: #<span class="caps">AA22FF</span>;
+}
+/* previously not defined, copying from default codemirror */
+.highlight-def {
+  color: #00f;
+}
+.highlight-string-2 {
+  color: #f50;
+}
+.highlight-qualifier {
+  color: #555;
+}
+.highlight-bracket {
+  color: #997;
+}
+.highlight-tag {
+  color: #170;
+}
+.highlight-attribute {
+  color: #00c;
+}
+.highlight-header {
+  color: blue;
+}
+.highlight-quote {
+  color: #090;
+}
+.highlight-link {
+  color: #00c;
+}
+/* apply the same style to codemirror */
+.cm-s-ipython span.cm-keyword {
+  color: #008000;
+  font-weight: bold;
+}
+.cm-s-ipython span.cm-atom {
+  color: #88F;
+}
+.cm-s-ipython span.cm-number {
+  color: #080;
+}
+.cm-s-ipython span.cm-def {
+  color: #00f;
+}
+.cm-s-ipython span.cm-variable {
+  color: #000;
+}
+.cm-s-ipython span.cm-operator {
+  color: #<span class="caps">AA22FF</span>;
+  font-weight: bold;
+}
+.cm-s-ipython span.cm-variable-2 {
+  color: #1a1a1a;
+}
+.cm-s-ipython span.cm-variable-3 {
+  color: #333333;
+}
+.cm-s-ipython span.cm-comment {
+  color: #408080;
+  font-style: italic;
+}
+.cm-s-ipython span.cm-string {
+  color: #<span class="caps">BA2121</span>;
+}
+.cm-s-ipython span.cm-string-2 {
+  color: #f50;
+}
+.cm-s-ipython span.cm-meta {
+  color: #<span class="caps">AA22FF</span>;
+}
+.cm-s-ipython span.cm-qualifier {
+  color: #555;
+}
+.cm-s-ipython span.cm-builtin {
+  color: #008000;
+}
+.cm-s-ipython span.cm-bracket {
+  color: #997;
+}
+.cm-s-ipython span.cm-tag {
+  color: #170;
+}
+.cm-s-ipython span.cm-attribute {
+  color: #00c;
+}
+.cm-s-ipython span.cm-header {
+  color: blue;
+}
+.cm-s-ipython span.cm-quote {
+  color: #090;
+}
+.cm-s-ipython span.cm-link {
+  color: #00c;
+}
+.cm-s-ipython span.cm-error {
+  color: #f00;
+}
+.cm-s-ipython span.cm-tab {
+  background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAMCAYAAAAkuj5RAAAAAXNSR0IArs4c6QAAAGFJREFUSMft1LsRQFAQheHPowAKoACx3IgEKtaEHujDjORSgWTH/ZOdnZOcM/sgk/kFFWY0qV8foQwS4MKBCS3qR6ixBJvElOobYAtivseIE120FaowJPN75GMu8j/LfMwNjh4HUpwg4LUAAAAASUVORK5CYII=);
+  background-position: right;
+  background-repeat: no-repeat;
+}
+div.output_wrapper {
+  /* this position must be relative to enable descendents to be absolute within it */
+  position: relative;
+  /* Old browsers */
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-box-align: stretch;
+  display: -moz-box;
+  -moz-box-orient: vertical;
+  -moz-box-align: stretch;
+  display: box;
+  box-orient: vertical;
+  box-align: stretch;
+  /* Modern browsers */
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  z-index: 1;
+}
+/* class for the output area when it should be height-limited */
+div.output_scroll {
+  /* ideally, this would be max-height, but <span class="caps">FF</span> barfs all over that */
+  height: 24em;
+  /* <span class="caps">FF</span> needs this *and the wrapper* to specify full width, or it will shrinkwrap */
+  width: 100%;
+  overflow: auto;
+  border-radius: 2px;
+  -webkit-box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.8);
+  box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.8);
+  display: block;
+}
+/* output div while it is collapsed */
+div.output_collapsed {
+  margin: 0px;
+  padding: 0px;
+  /* Old browsers */
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-box-align: stretch;
+  display: -moz-box;
+  -moz-box-orient: vertical;
+  -moz-box-align: stretch;
+  display: box;
+  box-orient: vertical;
+  box-align: stretch;
+  /* Modern browsers */
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+}
+div.out_prompt_overlay {
+  height: 100%;
+  padding: 0px 0.4em;
+  position: absolute;
+  border-radius: 2px;
+}
+div.out_prompt_overlay:hover {
+  /* use inner shadow to get border that is computed the same on WebKit/<span class="caps">FF</span> */
+  -webkit-box-shadow: inset 0 0 1px #000;
+  box-shadow: inset 0 0 1px #000;
+  background: rgba(240, 240, 240, 0.5);
+}
+div.output_prompt {
+  color: #D84315;
+}
+/* This class is the outer container of all output sections. */
+div.output_area {
+  padding: 0px;
+  page-break-inside: avoid;
+  /* Old browsers */
+  display: -webkit-box;
+  -webkit-box-orient: horizontal;
+  -webkit-box-align: stretch;
+  display: -moz-box;
+  -moz-box-orient: horizontal;
+  -moz-box-align: stretch;
+  display: box;
+  box-orient: horizontal;
+  box-align: stretch;
+  /* Modern browsers */
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
+}
+div.output_area .MathJax_Display {
+  text-align: left !important;
+}
+div.output_area 
+div.output_area 
+div.output_area img,
+div.output_area svg {
+  max-width: 100%;
+  height: auto;
+}
+div.output_area img.unconfined,
+div.output_area svg.unconfined {
+  max-width: none;
+}
+/* This is needed to protect the pre formating from global settings such
+   as that of bootstrap */
+.output {
+  /* Old browsers */
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-box-align: stretch;
+  display: -moz-box;
+  -moz-box-orient: vertical;
+  -moz-box-align: stretch;
+  display: box;
+  box-orient: vertical;
+  box-align: stretch;
+  /* Modern browsers */
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+}
+@media (max-width: 540px) {
+  div.output_area {
+    /* Old browsers */
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-box-align: stretch;
+    display: -moz-box;
+    -moz-box-orient: vertical;
+    -moz-box-align: stretch;
+    display: box;
+    box-orient: vertical;
+    box-align: stretch;
+    /* Modern browsers */
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+  }
+}
+div.output_area pre {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  vertical-align: baseline;
+  color: black;
+  background-color: transparent;
+  border-radius: 0;
+}
+/* This class is for the output subarea inside the output_area and after
+   the prompt div. */
+div.output_subarea {
+  overflow-x: auto;
+  padding: 0.4em;
+  /* Old browsers */
+  -webkit-box-flex: 1;
+  -moz-box-flex: 1;
+  box-flex: 1;
+  /* Modern browsers */
+  flex: 1;
+  max-width: calc(100% - 14ex);
+}
+div.output_scroll div.output_subarea {
+  overflow-x: visible;
+}
+/* The rest of the output_* classes are for special styling of the different
+   output types */
+/* all text output has this class: */
+div.output_text {
+  text-align: left;
+  color: #000;
+  /* This has to match that of the the CodeMirror class line-height below */
+  line-height: 1.21429em;
+}
+/* stdout/stderr are 'text' as well as 'stream', but execute_result/error are *not* streams */
+div.output_stderr {
+  background: #fdd;
+  /* very light red background for stderr */
+}
+div.output_latex {
+  text-align: left;
+}
+/* Empty output_javascript divs should have no height */
+div.output_javascript:empty {
+  padding: 0;
+}
+.js-error {
+  color: darkred;
+}
+/* raw_input styles */
+div.raw_input_container {
+  line-height: 1.21429em;
+  padding-top: 5px;
+}
+pre.raw_input_prompt {
+  /* nothing needed here. */
+}
+input.raw_input {
+  font-family: monospace;
+  font-size: inherit;
+  color: inherit;
+  width: auto;
+  /* make sure input baseline aligns with prompt */
+  vertical-align: baseline;
+  /* padding + margin = 0.5em between prompt and cursor */
+  padding: 0em 0.25em;
+  margin: 0em 0.25em;
+}
+input.raw_input:focus {
+  box-shadow: none;
+}
+p.p-space {
+  margin-bottom: 10px;
+}
+div.output_unrecognized {
+  padding: 5px;
+  font-weight: bold;
+  color: red;
+}
+div.output_unrecognized a {
+  color: inherit;
+  text-decoration: none;
+}
+div.output_unrecognized a:hover {
+  color: inherit;
+  text-decoration: none;
+}
+.rendered_html {
+  color: #000;
+  /* any extras will just be numbers: */
+}
+
+
+
+.rendered_html :link {
+  text-decoration: underline;
+}
+.rendered_html :visited {
+  text-decoration: underline;
+}
+
+
+
+
+
+
+.rendered_html h1:first-child {
+  margin-top: 0.538em;
+}
+.rendered_html h2:first-child {
+  margin-top: 0.636em;
+}
+.rendered_html h3:first-child {
+  margin-top: 0.777em;
+}
+.rendered_html h4:first-child {
+  margin-top: 1em;
+}
+.rendered_html h5:first-child {
+  margin-top: 1em;
+}
+.rendered_html h6:first-child {
+  margin-top: 1em;
+}
+
+
+
+
+
+
+
+
+.rendered_html * + ul {
+  margin-top: 1em;
+}
+.rendered_html * + ol {
+  margin-top: 1em;
+}
+
+
+.rendered_html pre,
+
+
+
+.rendered_html tr,
+.rendered_html th,
+
+.rendered_html td,
+
+
+.rendered_html * + table {
+  margin-top: 1em;
+}
+
+.rendered_html * + p {
+  margin-top: 1em;
+}
+
+.rendered_html * + img {
+  margin-top: 1em;
+}
+.rendered_html img,
+
+.rendered_html img.unconfined,
+
+div.text_cell {
+  /* Old browsers */
+  display: -webkit-box;
+  -webkit-box-orient: horizontal;
+  -webkit-box-align: stretch;
+  display: -moz-box;
+  -moz-box-orient: horizontal;
+  -moz-box-align: stretch;
+  display: box;
+  box-orient: horizontal;
+  box-align: stretch;
+  /* Modern browsers */
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
+}
+@media (max-width: 540px) {
+  div.text_cell > div.prompt {
+    display: none;
+  }
+}
+div.text_cell_render {
+  /*font-family: "Helvetica Neue", Arial, Helvetica, Geneva, sans-serif;*/
+  outline: none;
+  resize: none;
+  width: inherit;
+  border-style: none;
+  padding: 0.5em 0.5em 0.5em 0.4em;
+  color: #000;
+  box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+}
+a.anchor-link:link {
+  text-decoration: none;
+  padding: 0px 20px;
+  visibility: hidden;
+}
+h1:hover .anchor-link,
+h2:hover .anchor-link,
+h3:hover .anchor-link,
+h4:hover .anchor-link,
+h5:hover .anchor-link,
+h6:hover .anchor-link {
+  visibility: visible;
+}
+.text_cell.rendered .input_area {
+  display: none;
+}
+.text_cell.rendered 
+.text_cell.unrendered .text_cell_render {
+  display: none;
+}
+.cm-header-1,
+.cm-header-2,
+.cm-header-3,
+.cm-header-4,
+.cm-header-5,
+.cm-header-6 {
+  font-weight: bold;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+.cm-header-1 {
+  font-size: 185.7%;
+}
+.cm-header-2 {
+  font-size: 157.1%;
+}
+.cm-header-3 {
+  font-size: 128.6%;
+}
+.cm-header-4 {
+  font-size: 110%;
+}
+.cm-header-5 {
+  font-size: 100%;
+  font-style: italic;
+}
+.cm-header-6 {
+  font-size: 100%;
+  font-style: italic;
+}
+</style>
+<style type="text/css">.highlight .hll { background-color: #ffffcc }
+.highlight  { background: #f8f8f8; }
+.highlight .c { color: #408080; font-style: italic } /* Comment */
+.highlight .err { border: 1px solid #<span class="caps">FF0000</span> } /* Error */
+.highlight .k { color: #008000; font-weight: bold } /* Keyword */
+.highlight .o { color: #666666 } /* Operator */
+.highlight .ch { color: #408080; font-style: italic } /* Comment.Hashbang */
+.highlight .cm { color: #408080; font-style: italic } /* Comment.Multiline */
+.highlight .cp { color: #<span class="caps">BC7A00</span> } /* Comment.Preproc */
+.highlight .cpf { color: #408080; font-style: italic } /* Comment.PreprocFile */
+.highlight .c1 { color: #408080; font-style: italic } /* Comment.Single */
+.highlight .cs { color: #408080; font-style: italic } /* Comment.Special */
+.highlight .gd { color: #A00000 } /* Generic.Deleted */
+.highlight .ge { font-style: italic } /* Generic.Emph */
+.highlight .gr { color: #<span class="caps">FF0000</span> } /* Generic.Error */
+.highlight .gh { color: #000080; font-weight: bold } /* Generic.Heading */
+.highlight .gi { color: #00A000 } /* Generic.Inserted */
+.highlight .go { color: #888888 } /* Generic.Output */
+.highlight .gp { color: #000080; font-weight: bold } /* Generic.Prompt */
+.highlight .gs { font-weight: bold } /* Generic.Strong */
+.highlight .gu { color: #800080; font-weight: bold } /* Generic.Subheading */
+.highlight .gt { color: #<span class="caps">0044DD</span> } /* Generic.Traceback */
+.highlight .kc { color: #008000; font-weight: bold } /* Keyword.Constant */
+.highlight .kd { color: #008000; font-weight: bold } /* Keyword.Declaration */
+.highlight .kn { color: #008000; font-weight: bold } /* Keyword.Namespace */
+.highlight .kp { color: #008000 } /* Keyword.Pseudo */
+.highlight .kr { color: #008000; font-weight: bold } /* Keyword.Reserved */
+.highlight .kt { color: #B00040 } /* Keyword.Type */
+.highlight .m { color: #666666 } /* Literal.Number */
+.highlight .s { color: #<span class="caps">BA2121</span> } /* Literal.String */
+.highlight .na { color: #7D9029 } /* Name.Attribute */
+.highlight .nb { color: #008000 } /* Name.Builtin */
+.highlight .nc { color: #<span class="caps">0000FF</span>; font-weight: bold } /* Name.Class */
+.highlight .no { color: #880000 } /* Name.Constant */
+.highlight .nd { color: #<span class="caps">AA22FF</span> } /* Name.Decorator */
+.highlight .ni { color: #999999; font-weight: bold } /* Name.Entity */
+.highlight .ne { color: #<span class="caps">D2413A</span>; font-weight: bold } /* Name.Exception */
+.highlight .nf { color: #<span class="caps">0000FF</span> } /* Name.Function */
+.highlight .nl { color: #<span class="caps">A0A000</span> } /* Name.Label */
+.highlight .nn { color: #<span class="caps">0000FF</span>; font-weight: bold } /* Name.Namespace */
+.highlight .nt { color: #008000; font-weight: bold } /* Name.Tag */
+.highlight .nv { color: #19177C } /* Name.Variable */
+.highlight .ow { color: #<span class="caps">AA22FF</span>; font-weight: bold } /* Operator.Word */
+.highlight .w { color: #bbbbbb } /* Text.Whitespace */
+.highlight .mb { color: #666666 } /* Literal.Number.Bin */
+.highlight .mf { color: #666666 } /* Literal.Number.Float */
+.highlight .mh { color: #666666 } /* Literal.Number.Hex */
+.highlight .mi { color: #666666 } /* Literal.Number.Integer */
+.highlight .mo { color: #666666 } /* Literal.Number.Oct */
+.highlight .sb { color: #<span class="caps">BA2121</span> } /* Literal.String.Backtick */
+.highlight .sc { color: #<span class="caps">BA2121</span> } /* Literal.String.Char */
+.highlight .sd { color: #<span class="caps">BA2121</span>; font-style: italic } /* Literal.String.Doc */
+.highlight .s2 { color: #<span class="caps">BA2121</span> } /* Literal.String.Double */
+.highlight .se { color: #<span class="caps">BB6622</span>; font-weight: bold } /* Literal.String.Escape */
+.highlight .sh { color: #<span class="caps">BA2121</span> } /* Literal.String.Heredoc */
+.highlight .si { color: #<span class="caps">BB6688</span>; font-weight: bold } /* Literal.String.Interpol */
+.highlight .sx { color: #008000 } /* Literal.String.Other */
+.highlight .sr { color: #<span class="caps">BB6688</span> } /* Literal.String.Regex */
+.highlight .s1 { color: #<span class="caps">BA2121</span> } /* Literal.String.Single */
+.highlight .ss { color: #19177C } /* Literal.String.Symbol */
+.highlight .bp { color: #008000 } /* Name.Builtin.Pseudo */
+.highlight .vc { color: #19177C } /* Name.Variable.Class */
+.highlight .vg { color: #19177C } /* Name.Variable.Global */
+.highlight .vi { color: #19177C } /* Name.Variable.Instance */
+.highlight .il { color: #666666 } /* Literal.Number.Integer.Long */</style>
+<style type="text/css">
+/* Temporary definitions which will become obsolete with Notebook release 5.0 */
+.ansi-black-fg { color: #<span class="caps">3E424D</span>; }
+.ansi-black-bg { background-color: #<span class="caps">3E424D</span>; }
+.ansi-black-intense-fg { color: #282C36; }
+.ansi-black-intense-bg { background-color: #282C36; }
+.ansi-red-fg { color: #<span class="caps">E75C58</span>; }
+.ansi-red-bg { background-color: #<span class="caps">E75C58</span>; }
+.ansi-red-intense-fg { color: #<span class="caps">B22B31</span>; }
+.ansi-red-intense-bg { background-color: #<span class="caps">B22B31</span>; }
+.ansi-green-fg { color: #00A250; }
+.ansi-green-bg { background-color: #00A250; }
+.ansi-green-intense-fg { color: #007427; }
+.ansi-green-intense-bg { background-color: #007427; }
+.ansi-yellow-fg { color: #<span class="caps">DDB62B</span>; }
+.ansi-yellow-bg { background-color: #<span class="caps">DDB62B</span>; }
+.ansi-yellow-intense-fg { color: #<span class="caps">B27D12</span>; }
+.ansi-yellow-intense-bg { background-color: #<span class="caps">B27D12</span>; }
+.ansi-blue-fg { color: #<span class="caps">208FFB</span>; }
+.ansi-blue-bg { background-color: #<span class="caps">208FFB</span>; }
+.ansi-blue-intense-fg { color: #<span class="caps">0065CA</span>; }
+.ansi-blue-intense-bg { background-color: #<span class="caps">0065CA</span>; }
+.ansi-magenta-fg { color: #<span class="caps">D160C4</span>; }
+.ansi-magenta-bg { background-color: #<span class="caps">D160C4</span>; }
+.ansi-magenta-intense-fg { color: #A03196; }
+.ansi-magenta-intense-bg { background-color: #A03196; }
+.ansi-cyan-fg { color: #<span class="caps">60C6C8</span>; }
+.ansi-cyan-bg { background-color: #<span class="caps">60C6C8</span>; }
+.ansi-cyan-intense-fg { color: #<span class="caps">258F8F</span>; }
+.ansi-cyan-intense-bg { background-color: #<span class="caps">258F8F</span>; }
+.ansi-white-fg { color: #<span class="caps">C5C1B4</span>; }
+.ansi-white-bg { background-color: #<span class="caps">C5C1B4</span>; }
+.ansi-white-intense-fg { color: #<span class="caps">A1A6B2</span>; }
+.ansi-white-intense-bg { background-color: #<span class="caps">A1A6B2</span>; }
+
+.ansi-bold { font-weight: bold; }
+</style>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Data visualization,according to data visualization expert Stephen Few, is:&#8221;&#8230;a collection of methods that use visual representations to explore, make sense of, and communicate quantitative&nbsp;data&#8221;.</p>
+<p>Data visualization is an interdisciplinary field, which requires several skills like: coding, web development, design, and&nbsp;database.</p>
+<p>The source code for this tutorial can be found in this github&nbsp;repository.</p>
+<p>Below is an animated gif of the interactive data visualization dashboard that we will build in this&nbsp;tutorial.</p>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p><img alt="Alt text" src="images/meetupfinal.gif"  height="450"  width="650" /></p>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="1.-The-case-study">1. The case study<a class="anchor-link" href="#1.-The-case-study">¶</a></h2><p>This study is aimed to show tech groups in four european countries: France, Beligium, Luxembourg and Swiss.
+Quick Brainstorm (of desirable hypothesis or&nbsp;questions):</p>
+<pre><code>Which cities have a highest number of group or members ?
+What about groups creattion by year?
+Wich are the biggest groups?
+What is their geographic distribution?
+
+
+</code></pre>
+<p>We used Meetup.com <span class="caps">API</span> in order to get data. Meetup.com is a website used by technologists, coders and entrepreneurs to organise&nbsp;events.</p>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="2.-My-Dataviz-Toolchain">2. My Dataviz Toolchain<a class="anchor-link" href="#2.-My-Dataviz-Toolchain">¶</a></h2><p>For our data visualization, we will use these&nbsp;tools:</p>
+<ul>
+<li><p>Jupyter Notebook and Python Pandas for getting, cleaning and structuring&nbsp;data</p>
+</li>
+<li><p>Flask for serving static files (html, css and Javascript file) and data to the&nbsp;browser</p>
+</li>
+<li><p>D3.js,<span class="caps">DC</span>.js and Leaflet.js for building the charts and&nbsp;map</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="2.-Data-Preparation">2. Data Preparation<a class="anchor-link" href="#2.-Data-Preparation">¶</a></h2><p>We start by downloading the dataset from meetup.com <span class="caps">API</span> (<a href="https://www.meetup.com/meetup_api/">https://www.meetup.com/meetup_api/</a>). You need a key to download the&nbsp;data.</p>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>We import python&nbsp;librairies</p>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In [16]:</div>
+<div class="inner_cell">
+<div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">import</span> <span class="nn">urllib.request</span>
+<span class="kn">import</span> <span class="nn">requests</span>
+<span class="kn">import</span> <span class="nn">json</span>
+<span class="kn">import</span> <span class="nn">six</span>
+<span class="kn">from</span> <span class="nn">time</span> <span class="k">import</span> <span class="n">sleep</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">geopy.geocoders</span> <span class="k">import</span> <span class="n">Nominatim</span>
+<span class="n">geolocator</span> <span class="o">=</span> <span class="n">Nominatim</span><span class="p">()</span> 
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>We generate a list of signed URLs for all given&nbsp;cities</p>
+<p>Now, we should solicit signed <span class="caps">URL</span> for each search (in our case, city) and output of these signed URLs will provide the detail information about matched&nbsp;groups:</p>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In [17]:</div>
+<div class="inner_cell">
+<div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># Create a list of all cities</span>
+<span class="n">places</span> <span class="o">=</span> <span class="p">[</span> <span class="s2">"paris"</span><span class="p">,</span> <span class="s2">"lyon"</span><span class="p">,</span> <span class="s2">"bordeaux"</span><span class="p">,</span> <span class="s2">"chartres"</span><span class="p">,</span> <span class="s2">"la loupe"</span><span class="p">,</span> <span class="s2">"orléans"</span><span class="p">,</span> <span class="s2">"rennes"</span><span class="p">,</span> <span class="s2">"montpellier"</span><span class="p">,</span><span class="s2">"strasbourg"</span><span class="p">,</span> <span class="s2">"toulouse"</span><span class="p">,</span> <span class="s2">"nice"</span><span class="p">,</span> <span class="s2">"fontainebleau"</span><span class="p">,</span> <span class="s2">"geneve"</span><span class="p">,</span> <span class="s2">"brussels"</span><span class="p">,</span> <span class="s2">"luxembourg"</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In [18]:</div>
+<div class="inner_cell">
+<div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">urls</span> <span class="o">=</span> <span class="p">[]</span> <span class="c1">#url lists</span>
+<span class="n">data_format</span> <span class="o">=</span> <span class="s2">"json"</span> <span class="c1">#you can add another format like XML</span>
+<span class="n">category_id</span><span class="o">=</span><span class="s2">"34"</span> <span class="c1">#Id of tech groups</span>
+<span class="n">key</span> <span class="o">=</span> <span class="s2">""</span> <span class="c1"># initialise with your sign, check sample signed key</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>We are going&nbsp;to:</p>
+<ul>
+<li>Create an object to access longitude and latitude of&nbsp;city</li>
+<li>Access city from given list and generate latitude and longitude using “geolocator”&nbsp;object</li>
+<li>Generate url string with required attributes like data format(json), radius (number miles from center of the city 
+50),latitude and&nbsp;longitude</li>
+<li>Iterate this step for each city and append all URLs in a&nbsp;list</li>
+<li>Read data from <span class="caps">URL</span> and access relevant features in a&nbsp;DataFrame</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In [19]:</div>
+<div class="inner_cell">
+<div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="k">for</span> <span class="n">place</span> <span class="ow">in</span> <span class="n">places</span><span class="p">:</span> 
+        <span class="n">location</span> <span class="o">=</span> <span class="n">geolocator</span><span class="o">.</span><span class="n">geocode</span><span class="p">(</span><span class="n">place</span><span class="p">)</span>
+        <span class="n">urls</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">"https://api.meetup.com/2/groups?offset=0&category;_id=34&format;="</span> <span class="o">+</span> <span class="n">data_format</span> <span class="o">+</span> <span class="s2">"&lon;="</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">location</span><span class="o">.</span><span class="n">longitude</span><span class="p">)</span> <span class="o">+</span> <span class="s2">"&photo-host;=public&page;=20&fields;=&lat;="</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">location</span><span class="o">.</span><span class="n">latitude</span><span class="p">)</span> <span class="o">+</span> <span class="s2">"&order;=id&desc;=false&key;="</span><span class="o">+</span><span class="n">key</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Now, we have list of URLs for all cities. Next, we will use urllib.request library to read data into <span class="caps">JSON</span> format. Then, we’ll read the data to a list before converting it to a&nbsp;DataFrame.</p>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In [20]:</div>
+<div class="inner_cell">
+<div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="nb">id</span><span class="p">,</span><span class="n">name</span><span class="p">,</span><span class="n">members</span><span class="p">,</span><span class="n">city</span><span class="p">,</span><span class="n">country</span><span class="p">,</span><span class="n">lat</span><span class="p">,</span><span class="n">lon</span> <span class="o">=</span> <span class="p">[],[</span> <span class="p">],[</span> <span class="p">],</span> <span class="p">[],</span> <span class="p">[],</span> <span class="p">[],[]</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In [21]:</div>
+<div class="inner_cell">
+<div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="k">for</span> <span class="n">url</span> <span class="ow">in</span> <span class="n">urls</span><span class="p">:</span>
+    <span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">text</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In [22]:</div>
+<div class="inner_cell">
+<div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">data</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="output_wrapper">
+<div class="output">
+<div class="output_area"><div class="prompt output_prompt">Out[22]:</div>
+<div class="output_text output_subarea output_execute_result">
+<pre>dict_keys(['results', 'meta'])</pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In [23]:</div>
+<div class="inner_cell">
+<div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">data</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="s2">"results"</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In [24]:</div>
+<div class="inner_cell">
+<div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">data</span><span class="p">:</span>
+    <span class="nb">id</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">i</span><span class="p">[</span><span class="s1">'id'</span><span class="p">])</span>
+    <span class="n">name</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">i</span><span class="p">[</span><span class="s1">'name'</span><span class="p">])</span>
+    <span class="n">members</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">i</span><span class="p">[</span><span class="s1">'members'</span><span class="p">])</span>
+    <span class="n">city</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">i</span><span class="p">[</span><span class="s1">'city'</span><span class="p">])</span>
+    <span class="n">country</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">i</span><span class="p">[</span><span class="s1">'country'</span><span class="p">])</span>
+    <span class="n">lat</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">i</span><span class="p">[</span><span class="s1">'lat'</span><span class="p">])</span>
+    <span class="n">lon</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">i</span><span class="p">[</span><span class="s1">'lon'</span><span class="p">])</span>
+    
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In [25]:</div>
+<div class="inner_cell">
+<div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">([</span><span class="nb">id</span><span class="p">,</span><span class="n">name</span><span class="p">,</span><span class="n">members</span><span class="p">,</span> <span class="n">city</span><span class="p">,</span> <span class="n">country</span><span class="p">,</span> <span class="n">lat</span><span class="p">,</span> <span class="n">lon</span><span class="p">])</span><span class="o">.</span><span class="n">T</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In [26]:</div>
+<div class="inner_cell">
+<div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">df</span><span class="o">.</span><span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">'id'</span><span class="p">,</span><span class="s1">'name'</span><span class="p">,</span><span class="s1">'members'</span><span class="p">,</span><span class="s1">'city'</span><span class="p">,</span><span class="s1">'country'</span><span class="p">,</span><span class="s1">'lat'</span><span class="p">,</span><span class="s1">'lon'</span><span class="p">]</span><span class="c1">#df = df.sort_values(by=['c1','c2'], ascending=[False,True])</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In [27]:</div>
+<div class="inner_cell">
+<div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">df</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="output_wrapper">
+<div class="output">
+<div class="output_area"><div class="prompt output_prompt">Out[27]:</div>
+<div class="output_html rendered_html output_subarea output_execute_result">
+<div>
+<table border="1" class="dataframe">
+<thead>
+<tr style="text-align: right;">
+<th></th>
+<th>id</th>
+<th>name</th>
+<th>members</th>
+<th>city</th>
+<th>country</th>
+<th>lat</th>
+<th>lon</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<th>0</th>
+<td>192084</td>
+<td>Mac User Luxembourg Group</td>
+<td>149</td>
+<td>Luxembourg</td>
+<td><span class="caps">LU</span></td>
+<td>49.62</td>
+<td>6.12</td>
+</tr>
+<tr>
+<th>1</th>
+<td>5431352</td>
+<td>Data Science Luxembourg</td>
+<td>1281</td>
+<td>Luxembourg</td>
+<td><span class="caps">LU</span></td>
+<td>49.62</td>
+<td>6.12</td>
+</tr>
+<tr>
+<th>2</th>
+<td>6823432</td>
+<td>Luxembourg Drupal Users and Developers community</td>
+<td>45</td>
+<td>Luxembourg</td>
+<td><span class="caps">LU</span></td>
+<td>49.62</td>
+<td>6.12</td>
+</tr>
+<tr>
+<th>3</th>
+<td>8070142</td>
+<td>Luxembourg and Greater Region <span class="caps">PHP</span> Meetup Group</td>
+<td>282</td>
+<td>Luxembourg</td>
+<td><span class="caps">LU</span></td>
+<td>49.62</td>
+<td>6.12</td>
+</tr>
+<tr>
+<th>4</th>
+<td>14829342</td>
+<td>Wearable Wednesday Luxembourg</td>
+<td>193</td>
+<td>Luxembourg</td>
+<td><span class="caps">LU</span></td>
+<td>49.62</td>
+<td>6.12</td>
+</tr>
+<tr>
+<th>5</th>
+<td>15559472</td>
+<td>Geek Girls Carrots Luxembourg</td>
+<td>498</td>
+<td>Luxembourg</td>
+<td><span class="caps">LU</span></td>
+<td>49.62</td>
+<td>6.12</td>
+</tr>
+<tr>
+<th>6</th>
+<td>16263302</td>
+<td>CoderDojoLu</td>
+<td>209</td>
+<td>Luxembourg</td>
+<td><span class="caps">LU</span></td>
+<td>49.62</td>
+<td>6.12</td>
+</tr>
+<tr>
+<th>7</th>
+<td>17357172</td>
+<td>Luxembourg Scrum Master Meetup</td>
+<td>65</td>
+<td>Luxembourg</td>
+<td><span class="caps">LU</span></td>
+<td>49.62</td>
+<td>6.12</td>
+</tr>
+<tr>
+<th>8</th>
+<td>17761752</td>
+<td>Meteor Luxembourg</td>
+<td>67</td>
+<td>Luxembourg</td>
+<td><span class="caps">LU</span></td>
+<td>49.62</td>
+<td>6.12</td>
+</tr>
+<tr>
+<th>9</th>
+<td>18338469</td>
+<td>JavaScript Luxembourg</td>
+<td>686</td>
+<td>Luxembourg</td>
+<td><span class="caps">LU</span></td>
+<td>49.62</td>
+<td>6.12</td>
+</tr>
+<tr>
+<th>10</th>
+<td>18443417</td>
+<td>Betacube Community</td>
+<td>117</td>
+<td>Wormeldange</td>
+<td><span class="caps">LU</span></td>
+<td>49.6</td>
+<td>6.4</td>
+</tr>
+<tr>
+<th>11</th>
+<td>18462669</td>
+<td><span class="caps">AWS</span> User Group Luxembourg</td>
+<td>268</td>
+<td>Luxembourg</td>
+<td><span class="caps">LU</span></td>
+<td>49.62</td>
+<td>6.12</td>
+</tr>
+<tr>
+<th>12</th>
+<td>18580486</td>
+<td>luxembourg_on_rails.rb</td>
+<td>68</td>
+<td>Luxembourg</td>
+<td><span class="caps">LU</span></td>
+<td>49.62</td>
+<td>6.12</td>
+</tr>
+<tr>
+<th>13</th>
+<td>18610243</td>
+<td>Luxembourg Data Analytics Meetup</td>
+<td>123</td>
+<td>Luxembourg</td>
+<td><span class="caps">LU</span></td>
+<td>49.62</td>
+<td>6.12</td>
+</tr>
+<tr>
+<th>14</th>
+<td>18626883</td>
+<td>Luxembourg Bitcoin Meetup</td>
+<td>237</td>
+<td>Luxembourg</td>
+<td><span class="caps">LU</span></td>
+<td>49.62</td>
+<td>6.12</td>
+</tr>
+<tr>
+<th>15</th>
+<td>18739600</td>
+<td>Docker Luxembourg</td>
+<td>269</td>
+<td>Luxembourg</td>
+<td><span class="caps">LU</span></td>
+<td>49.62</td>
+<td>6.12</td>
+</tr>
+<tr>
+<th>16</th>
+<td>19347222</td>
+<td>Luxembourg Co-founders Meetup</td>
+<td>230</td>
+<td>Luxembourg</td>
+<td><span class="caps">LU</span></td>
+<td>49.62</td>
+<td>6.12</td>
+</tr>
+<tr>
+<th>17</th>
+<td>19491360</td>
+<td>Python Trier Meetup</td>
+<td>161</td>
+<td>Trier</td>
+<td><span class="caps">DE</span></td>
+<td>49.75</td>
+<td>6.63</td>
+</tr>
+<tr>
+<th>18</th>
+<td>19631843</td>
+<td>Antenne <span class="caps">AFUP</span> Luxembourg : <span class="caps">PHP</span></td>
+<td>113</td>
+<td>Luxembourg</td>
+<td><span class="caps">LU</span></td>
+<td>49.62</td>
+<td>6.12</td>
+</tr>
+<tr>
+<th>19</th>
+<td>19646311</td>
+<td>DevOps Luxembourg</td>
+<td>176</td>
+<td>Luxembourg</td>
+<td><span class="caps">LU</span></td>
+<td>49.62</td>
+<td>6.12</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>We create a json file wich contains informations about tech groups in France, Luxembourg, Belgium and&nbsp;Swiss.</p>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In [28]:</div>
+<div class="inner_cell">
+<div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">df</span><span class="o">.</span><span class="n">to_json</span><span class="p">(</span><span class="s1">'techgroup.json'</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Next, we create another file called app.py inside the project folder. We copy the code below inside the app.py file. This is server side&nbsp;code.</p>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In [ ]:</div>
+<div class="inner_cell">
+<div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span>    <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span> <span class="kn">from</span> <span class="nn">shapely.geometry</span> <span class="k">import</span> <span class="n">Point</span><span class="p">,</span> <span class="n">shape</span>
+
+    <span class="kn">from</span> <span class="nn">flask</span> <span class="k">import</span> <span class="n">Flask</span> <span class="kn">from</span> <span class="nn">flask</span> <span class="k">import</span> <span class="n">render_template</span> <span class="kn">import</span> <span class="nn">json</span>
+
+    <span class="n">data_path</span> <span class="o">=</span> <span class="s1">'./input/'</span>
+
+    <span class="n">app</span> <span class="o">=</span> <span class="n">Flask</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+
+    <span class="nd">@app</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s2">"/"</span><span class="p">)</span> <span class="k">def</span> <span class="nf">index</span><span class="p">():</span> <span class="k">return</span> <span class="n">render_template</span><span class="p">(</span><span class="s2">"index.html"</span><span class="p">)</span>
+
+    <span class="nd">@app</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s2">"/data"</span><span class="p">)</span> <span class="k">def</span> <span class="nf">get_data</span><span class="p">():</span>
+
+    <span class="n">df_clean</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_json</span><span class="p">(</span><span class="n">data_path</span> <span class="o">+</span> <span class="s1">'techgroups.json'</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">df_clean</span><span class="o">.</span><span class="n">to_json</span><span class="p">(</span><span class="n">orient</span><span class="o">=</span><span class="s1">'records'</span><span class="p">)</span>
+
+
+    <span class="k">if</span> <span class="n">name</span> <span class="o">==</span> <span class="s2">"main"</span><span class="p">:</span> <span class="n">app</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">host</span><span class="o">=</span><span class="s1">'0.0.0.0'</span><span class="p">,</span><span class="n">port</span><span class="o">=</span><span class="mi">5000</span><span class="p">,</span><span class="n">debug</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>From a Terminal window, go to the project folder, and start the server by running the following&nbsp;command.</p>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In [ ]:</div>
+<div class="inner_cell">
+<div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span>    <span class="n">python</span> <span class="n">app</span><span class="o">.</span><span class="n">py</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>If you start the server by running python app.py and go to <a href="http://localhost:5000/">http://localhost:5000/</a>, you will see all the projects data printed in the&nbsp;browser.</p>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="3.-Front-end-Side-Preparation">3. Front-end Side Preparation<a class="anchor-link" href="#3.-Front-end-Side-Preparation">¶</a></h2><p>The server side code is ready, let&#8217;s start building the front-end&nbsp;code.</p>
+<p>We will use a dashboard template from&nbsp;keen.io.</p>
+<p>For building the charts, we&#8217;ll use 4 Javascript libraries Crossfilter.js, D3.js and <span class="caps">DC</span>.js.</p>
+<ul>
+<li>Crossfilter.js is a Javascript library for grouping, filtering, and aggregating large&nbsp;datasets.</li>
+<li>D3.js is a Javascript library for controlling the data and building&nbsp;charts.</li>
+<li><span class="caps">DC</span>.js is a Javascript charting library that leverages both crossfilter.js and d3.js, and makes the creation of
+highly interactive data visualization&nbsp;simple.</li>
+<li>Leaflet.js is JavaScript library for interactive maps. Leaflet has many plugins that can be used to extend its
+functionalities. We will use the heatmap plugin to show the distribution of tech groups in the&nbsp;map.</li>
+<li>queue.js Queue is &#8220;a plugin that loads external files into the script and ensures each file is completely loaded
+before allowing the script to continue running.&#8221;(Sam Matthews, <a href="http://giscollective.org/d3-queue-js/">http://giscollective.org/d3-queue-js/</a>)</li>
+<li>Underscore.js a library that contains useful functional programming&nbsp;helpers</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="4.-Building-the-Charts-and-Map">4. Building the Charts and Map<a class="anchor-link" href="#4.-Building-the-Charts-and-Map">¶</a></h2><p>The source code for the charts and map goes into&nbsp;graphs.js.</p>
+<p>We start by using a queue() function from the queue.js library for reading the data from the server and executing the function makegraphs(). The queue() function makes sure that we have all the data transferred to the browser before drawing the&nbsp;graphs.</p>
+<p>The makeGraphs() function contains the code for cleaning the data, building the crossfilter dimensions for filtering the data, the dc.js charts and the map. It takes 2 arguments, the first one is error which can be used for handling any error from the the .defer function, and as second argument recordsJson which contain the data that we read from the&nbsp;server.</p>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In [ ]:</div>
+<div class="inner_cell">
+<div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">queue</span><span class="p">()</span>
+        <span class="o">.</span><span class="n">defer</span><span class="p">(</span><span class="n">d3</span><span class="o">.</span><span class="n">json</span><span class="p">,</span> <span class="s2">"/data"</span><span class="p">)</span> 
+        <span class="o">.</span><span class="k">await</span><span class="p">(</span><span class="n">makeGraphs</span><span class="p">);</span>
+
+
+    <span class="n">function</span> <span class="n">makeGraphs</span><span class="p">(</span><span class="n">error</span><span class="p">,</span> <span class="n">recordsJson</span><span class="p">)</span> <span class="p">{</span> <span class="o">.</span> <span class="o">.</span> <span class="o">.</span> <span class="p">};</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Inside the makeGraphs function, we start by changing the date type from string to datetime objects. We last transform the longitute and latitude types into&nbsp;numeric.</p>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In [ ]:</div>
+<div class="inner_cell">
+<div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span> <span class="n">var</span> <span class="n">records</span> <span class="o">=</span> <span class="n">recordsJson</span><span class="p">;</span> <span class="n">var</span> <span class="n">dateFormat</span> <span class="o">=</span> <span class="n">d3</span><span class="o">.</span><span class="n">time</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="s2">"%Y"</span><span class="p">)</span><span class="o">.</span><span class="n">parse</span><span class="p">;</span>
+
+    <span class="n">_</span><span class="o">.</span><span class="n">each</span><span class="p">(</span><span class="n">records</span><span class="p">,</span> <span class="n">function</span><span class="p">(</span><span class="n">d</span><span class="p">)</span> <span class="p">{</span> <span class="n">d</span><span class="p">[</span><span class="s2">"year"</span><span class="p">]</span> <span class="o">=</span> <span class="n">dateFormat</span><span class="p">(</span><span class="n">String</span><span class="p">(</span><span class="n">d</span><span class="p">[</span><span class="s2">"year"</span><span class="p">]));</span> <span class="n">d</span><span class="p">[</span><span class="s2">"Longitude"</span><span class="p">]</span> <span class="o">=</span> <span class="o">+</span><span class="n">d</span><span class="p">[</span><span class="s2">"Longitude"</span><span class="p">];</span>
+    <span class="n">d</span><span class="p">[</span><span class="s2">"Latitude"</span><span class="p">]</span> <span class="o">=</span> <span class="o">+</span><span class="n">d</span><span class="p">[</span><span class="s2">"Latitude"</span><span class="p">];</span> <span class="p">});</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Next, we create a crossfilter&nbsp;instance.</p>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In [ ]:</div>
+<div class="inner_cell">
+<div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">var</span> <span class="n">ndx</span> <span class="o">=</span> <span class="n">crossfilter</span><span class="p">(</span><span class="n">records</span><span class="p">);</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In [ ]:</div>
+<div class="inner_cell">
+<div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">Next</span><span class="p">,</span> <span class="n">we</span> <span class="n">define</span> <span class="n">our</span> <span class="mi">5</span> <span class="n">data</span> <span class="n">dimensions</span><span class="o">.</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In [ ]:</div>
+<div class="inner_cell">
+<div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span>    <span class="n">var</span> <span class="n">cityDim</span> <span class="o">=</span> <span class="n">ndx</span><span class="o">.</span><span class="n">dimension</span><span class="p">(</span><span class="n">function</span><span class="p">(</span><span class="n">d</span><span class="p">)</span> <span class="p">{</span> <span class="k">return</span> <span class="n">d</span><span class="p">[</span><span class="s2">"city"</span><span class="p">];</span> <span class="p">});</span>
+    <span class="n">var</span> <span class="n">yearDim</span><span class="o">=</span><span class="n">ndx</span><span class="o">.</span><span class="n">dimension</span><span class="p">(</span><span class="n">function</span> <span class="p">(</span><span class="n">d</span><span class="p">)</span> <span class="p">{</span> <span class="k">return</span> <span class="n">d</span><span class="p">[</span><span class="s2">"year"</span><span class="p">];});</span>
+    <span class="n">var</span> <span class="n">membersDim</span> <span class="o">=</span> <span class="n">ndx</span><span class="o">.</span><span class="n">dimension</span><span class="p">(</span><span class="n">function</span><span class="p">(</span><span class="n">d</span><span class="p">)</span> <span class="p">{</span> <span class="k">return</span> <span class="n">d</span><span class="p">[</span><span class="s2">"members"</span><span class="p">];</span> <span class="p">});</span>
+    <span class="n">var</span> <span class="n">nameGrpDim</span> <span class="o">=</span> <span class="n">ndx</span><span class="o">.</span><span class="n">dimension</span><span class="p">(</span><span class="n">function</span><span class="p">(</span><span class="n">d</span><span class="p">)</span> <span class="p">{</span> <span class="k">return</span> <span class="n">d</span><span class="p">[</span><span class="s2">"name"</span><span class="p">];</span> <span class="p">});</span>
+    <span class="n">var</span> <span class="n">locationdDim</span> <span class="o">=</span> <span class="n">ndx</span><span class="o">.</span><span class="n">dimension</span><span class="p">(</span><span class="n">function</span><span class="p">(</span><span class="n">d</span><span class="p">)</span> <span class="p">{</span> <span class="k">return</span> <span class="n">d</span><span class="p">[</span><span class="s2">"location"</span><span class="p">];</span> <span class="p">});</span>
+    <span class="n">var</span> <span class="n">allDim</span> <span class="o">=</span> <span class="n">ndx</span><span class="o">.</span><span class="n">dimension</span><span class="p">(</span><span class="n">function</span><span class="p">(</span><span class="n">d</span><span class="p">)</span> <span class="p">{</span><span class="k">return</span> <span class="n">d</span><span class="p">;});</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In [ ]:</div>
+<div class="inner_cell">
+<div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">Next</span><span class="p">,</span> <span class="n">we</span> <span class="n">define</span> <span class="mi">4</span> <span class="n">data</span> <span class="n">groups</span><span class="o">.</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In [ ]:</div>
+<div class="inner_cell">
+<div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span>    <span class="n">var</span> <span class="n">cityGroup</span><span class="o">=</span><span class="n">cityDim</span><span class="o">.</span><span class="n">group</span><span class="p">()</span><span class="o">.</span><span class="n">reduceCount</span><span class="p">(</span><span class="n">function</span><span class="p">(</span><span class="n">d</span><span class="p">)</span> <span class="p">{</span><span class="k">return</span> <span class="n">d</span><span class="o">.</span><span class="n">name</span><span class="p">;});</span>
+    <span class="n">var</span> <span class="n">nameGroup</span> <span class="o">=</span> <span class="n">nameGrpDim</span><span class="o">.</span><span class="n">group</span><span class="p">()</span><span class="o">.</span><span class="n">reduceSum</span><span class="p">(</span><span class="n">function</span><span class="p">(</span><span class="n">d</span><span class="p">)</span> <span class="p">{</span><span class="k">return</span> <span class="n">d</span><span class="o">.</span><span class="n">members</span><span class="o">/</span><span class="mi">2</span><span class="p">});</span>
+    <span class="n">var</span> <span class="n">citybymembersGroup</span><span class="o">=</span><span class="n">cityDim</span><span class="o">.</span><span class="n">group</span><span class="p">()</span><span class="o">.</span><span class="n">reduceSum</span><span class="p">(</span><span class="n">function</span><span class="p">(</span><span class="n">d</span><span class="p">)</span> <span class="p">{</span><span class="k">return</span> <span class="n">d</span><span class="o">.</span><span class="n">members</span><span class="p">;});</span>
+    <span class="n">var</span> <span class="n">meetups</span> <span class="o">=</span> <span class="n">yearDim</span><span class="o">.</span><span class="n">group</span><span class="p">()</span><span class="o">.</span><span class="n">reduceCount</span><span class="p">(</span><span class="n">function</span><span class="p">(</span><span class="n">d</span><span class="p">)</span> <span class="p">{</span><span class="k">return</span> <span class="n">d</span><span class="o">.</span><span class="n">name</span><span class="p">;});</span>
+    <span class="n">var</span> <span class="nb">all</span> <span class="o">=</span> <span class="n">ndx</span><span class="o">.</span><span class="n">groupAll</span><span class="p">();</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Next, we define four dc charts. The first one is a line chart that will show the number of new tech groups created by year. The second chart is about the ranking of cities by number of groups. The third chart will show the top 30 tech group by members The fourth graph will show the top 30 cities by&nbsp;members</p>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In [ ]:</div>
+<div class="inner_cell">
+<div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span>    <span class="n">var</span> <span class="n">createdlineChart</span><span class="o">=</span><span class="n">dc</span><span class="o">.</span><span class="n">lineChart</span><span class="p">(</span><span class="s2">"#chart-line-createdperyear"</span><span class="p">);</span>
+    <span class="n">var</span> <span class="n">cityChart</span> <span class="o">=</span> <span class="n">dc</span><span class="o">.</span><span class="n">rowChart</span><span class="p">(</span><span class="s2">"#city-row-chart"</span><span class="p">);</span>
+    <span class="n">var</span> <span class="n">nameChart</span> <span class="o">=</span> <span class="n">dc</span><span class="o">.</span><span class="n">rowChart</span><span class="p">(</span><span class="s2">"#name-row-chart"</span><span class="p">);</span>
+    <span class="n">var</span> <span class="n">citybymembersChart</span><span class="o">=</span><span class="n">dc</span><span class="o">.</span><span class="n">rowChart</span><span class="p">(</span><span class="s2">"#citybymembers-row-chart"</span><span class="p">);</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>For each chart, we pass the necessary&nbsp;parameters.</p>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In [ ]:</div>
+<div class="inner_cell">
+<div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">cityChart</span> 
+       <span class="o">.</span><span class="n">height</span><span class="p">(</span><span class="mi">450</span><span class="p">)</span> 
+       <span class="o">.</span><span class="n">width</span><span class="p">(</span><span class="mi">380</span><span class="p">)</span> 
+       <span class="o">.</span><span class="n">dimension</span><span class="p">(</span><span class="n">cityDim</span><span class="p">)</span> 
+       <span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="n">cityGroup</span><span class="p">)</span> 
+       <span class="o">.</span><span class="n">rowsCap</span><span class="p">(</span><span class="mi">20</span><span class="p">)</span> 
+       <span class="o">.</span><span class="n">ordering</span><span class="p">(</span><span class="n">function</span><span class="p">(</span><span class="n">d</span><span class="p">)</span> <span class="p">{</span> <span class="k">return</span> <span class="o">-</span><span class="n">d</span><span class="o">.</span><span class="n">value</span> <span class="p">})</span>
+
+    <span class="n">createdlineChart</span>
+        <span class="o">.</span><span class="n">height</span><span class="p">(</span><span class="mi">450</span><span class="p">)</span>
+        <span class="o">.</span><span class="n">width</span><span class="p">(</span><span class="mi">680</span><span class="p">)</span>
+        <span class="o">.</span><span class="n">transitionDuration</span><span class="p">(</span><span class="mi">200</span><span class="p">)</span>
+        <span class="o">.</span><span class="n">renderLabel</span><span class="p">(</span><span class="n">true</span><span class="p">)</span>
+        <span class="o">.</span><span class="n">dimension</span><span class="p">(</span><span class="n">yearDim</span><span class="p">)</span>
+        <span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="n">meetups</span><span class="p">)</span>
+        <span class="o">.</span><span class="n">margins</span><span class="p">({</span><span class="n">top</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span> <span class="n">right</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span> <span class="n">bottom</span><span class="p">:</span> <span class="mi">20</span><span class="p">,</span> <span class="n">left</span><span class="p">:</span> <span class="mi">40</span><span class="p">})</span>
+        <span class="o">.</span><span class="n">elasticY</span><span class="p">(</span><span class="n">true</span><span class="p">)</span>
+        <span class="o">.</span><span class="n">x</span><span class="p">(</span><span class="n">d3</span><span class="o">.</span><span class="n">time</span><span class="o">.</span><span class="n">scale</span><span class="p">()</span><span class="o">.</span><span class="n">domain</span><span class="p">(</span><span class="n">d3</span><span class="o">.</span><span class="n">extent</span><span class="p">(</span><span class="n">records</span><span class="p">,</span> <span class="n">function</span><span class="p">(</span><span class="n">d</span><span class="p">)</span> <span class="p">{</span> <span class="k">return</span> <span class="n">d</span><span class="o">.</span><span class="n">year</span><span class="p">;</span> <span class="p">})))</span>
+        <span class="o">.</span><span class="n">xAxis</span><span class="p">()</span>
+
+    <span class="n">nameChart</span>
+       <span class="o">.</span><span class="n">height</span><span class="p">(</span><span class="mi">450</span><span class="p">)</span>
+       <span class="o">.</span><span class="n">width</span><span class="p">(</span><span class="mi">480</span><span class="p">)</span>
+       <span class="o">.</span><span class="n">dimension</span><span class="p">(</span><span class="n">nameGrpDim</span><span class="p">)</span>
+       <span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="n">nameGroup</span><span class="p">)</span>
+       <span class="o">.</span><span class="n">rowsCap</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+       <span class="o">.</span><span class="n">ordering</span><span class="p">(</span><span class="n">function</span><span class="p">(</span><span class="n">d</span><span class="p">)</span> <span class="p">{</span> <span class="k">return</span> <span class="o">-</span><span class="n">d</span><span class="o">.</span><span class="n">value</span> <span class="p">})</span>
+
+    <span class="n">citybymembersChart</span>
+       <span class="o">.</span><span class="n">height</span><span class="p">(</span><span class="mi">950</span><span class="p">)</span>
+       <span class="o">.</span><span class="n">width</span><span class="p">(</span><span class="mi">680</span><span class="p">)</span>
+       <span class="o">.</span><span class="n">dimension</span><span class="p">(</span><span class="n">cityDim</span><span class="p">)</span>
+       <span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="n">citybymembersGroup</span><span class="p">)</span>
+       <span class="o">.</span><span class="n">rowsCap</span><span class="p">(</span><span class="mi">30</span><span class="p">)</span>
+       <span class="o">.</span><span class="n">ordering</span><span class="p">(</span><span class="n">function</span><span class="p">(</span><span class="n">d</span><span class="p">)</span> <span class="p">{</span> <span class="k">return</span> <span class="o">-</span><span class="n">d</span><span class="o">.</span><span class="n">value</span> <span class="p">})</span>
+       <span class="p">;</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Next, we initialize a leaflet&nbsp;map.</p>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In [ ]:</div>
+<div class="inner_cell">
+<div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span>    <span class="n">var</span> <span class="nb">map</span> <span class="o">=</span> <span class="n">L</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="s1">'map'</span><span class="p">);</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>We define a function that will draw the map and adds a layer of heatmap representing the geographical distribution of the Meetup.com tech&nbsp;groups.</p>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In [ ]:</div>
+<div class="inner_cell">
+<div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">var</span> <span class="n">drawMap</span> <span class="o">=</span> <span class="n">function</span><span class="p">(){</span>
+
+    <span class="nb">map</span><span class="o">.</span><span class="n">setView</span><span class="p">([</span><span class="mi">47</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span> <span class="mi">5</span><span class="p">);</span>
+    <span class="n">mapLink</span> <span class="o">=</span> <span class="s1">'<a href="http://openstreetmap.org">OpenStreetMap</a>'</span><span class="p">;</span>
+    <span class="n">L</span><span class="o">.</span><span class="n">tileLayer</span><span class="p">(</span>
+        <span class="s1">'http://</span><span class="si">{s}</span><span class="s1">.tile.openstreetmap.org/</span><span class="si">{z}</span><span class="s1">/</span><span class="si">{x}</span><span class="s1">/</span><span class="si">{y}</span><span class="s1">.png'</span><span class="p">,</span> <span class="p">{</span>
+            <span class="n">attribution</span><span class="p">:</span> <span class="s1">'© '</span> <span class="o">+</span> <span class="n">mapLink</span> <span class="o">+</span> <span class="s1">' Contributors'</span><span class="p">,</span>
+            <span class="n">maxZoom</span><span class="p">:</span> <span class="mi">15</span><span class="p">,</span>
+        <span class="p">})</span><span class="o">.</span><span class="n">addTo</span><span class="p">(</span><span class="nb">map</span><span class="p">);</span>
+
+    <span class="o">//</span><span class="n">HeatMap</span>
+    <span class="n">var</span> <span class="n">geoData</span> <span class="o">=</span> <span class="p">[];</span>
+    <span class="n">_</span><span class="o">.</span><span class="n">each</span><span class="p">(</span><span class="n">allDim</span><span class="o">.</span><span class="n">top</span><span class="p">(</span><span class="n">Infinity</span><span class="p">),</span> <span class="n">function</span> <span class="p">(</span><span class="n">d</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">geoData</span><span class="o">.</span><span class="n">push</span><span class="p">([</span><span class="n">d</span><span class="p">[</span><span class="s2">"Latitude"</span><span class="p">],</span> <span class="n">d</span><span class="p">[</span><span class="s2">"Longitude"</span><span class="p">],</span> <span class="mi">1</span><span class="p">]);</span>
+      <span class="p">});</span>
+    <span class="n">var</span> <span class="n">heat</span> <span class="o">=</span> <span class="n">L</span><span class="o">.</span><span class="n">heatLayer</span><span class="p">(</span><span class="n">geoData</span><span class="p">,{</span>
+        <span class="n">radius</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span>
+        <span class="n">blur</span><span class="p">:</span> <span class="mi">20</span><span class="p">,</span> 
+        <span class="n">maxZoom</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+    <span class="p">})</span><span class="o">.</span><span class="n">addTo</span><span class="p">(</span><span class="nb">map</span><span class="p">);</span>
+
+<span class="p">};</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>We call drawMap() function to display the&nbsp;map.</p>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In [ ]:</div>
+<div class="inner_cell">
+<div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">drawMap</span><span class="p">();</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Next we define the rules for updating the map. The code below makes sure that anytime we filter any <span class="caps">DC</span>.js charts, we redraw the map with the new filtered&nbsp;data.</p>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In [ ]:</div>
+<div class="inner_cell">
+<div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">dcCharts</span> <span class="o">=</span> <span class="p">[</span><span class="n">cityChart</span><span class="p">,</span><span class="n">createdlineChart</span><span class="p">,</span><span class="n">nameChart</span><span class="p">,</span><span class="n">citybymembersChart</span><span class="p">];</span>
+
+ <span class="n">_</span><span class="o">.</span><span class="n">each</span><span class="p">(</span><span class="n">dcCharts</span><span class="p">,</span> <span class="n">function</span> <span class="p">(</span><span class="n">dcChart</span><span class="p">)</span> <span class="p">{</span> <span class="n">dcChart</span><span class="o">.</span><span class="n">on</span><span class="p">(</span><span class="s2">"filtered"</span><span class="p">,</span> <span class="n">function</span> <span class="p">(</span><span class="n">chart</span><span class="p">,</span> <span class="nb">filter</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nb">map</span><span class="o">.</span><span class="n">eachLayer</span><span class="p">(</span><span class="n">function</span> <span class="p">(</span><span class="n">layer</span><span class="p">)</span> <span class="p">{</span> <span class="nb">map</span><span class="o">.</span><span class="n">removeLayer</span><span class="p">(</span><span class="n">layer</span><span class="p">)</span> <span class="p">});</span> <span class="n">drawMap</span><span class="p">();</span> <span class="p">});</span> <span class="p">});</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>And finally, we call the renderAll() function for rendering all the&nbsp;charts.</p>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In [ ]:</div>
+<div class="inner_cell">
+<div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">dc</span><span class="o">.</span><span class="n">renderAll</span><span class="p">();</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>All the charts we defined in the chart.js file are dislayed in the index.html&nbsp;file.</p>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Conclusion">Conclusion<a class="anchor-link" href="#Conclusion">¶</a></h2><p>In this tutorial, I showed a process for building an interactive data&nbsp;visualization.</p>
+<p>All source code from this post can be found in this github&nbsp;repository.</p>
+</div>
+</div>
+</div>
+<script type="text/javascript">if (!document.getElementById('mathjaxscript_pelican_#%@#$@#')) {
+    var mathjaxscript = document.createElement('script');
+    mathjaxscript.id = 'mathjaxscript_pelican_#%@#$@#';
+    mathjaxscript.type = 'text/javascript';
+    mathjaxscript.src = '//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML';
+    mathjaxscript[(window.opera ? "innerHTML" : "text")] =
+        "MathJax.Hub.Config({" +
+        "    config: ['MMLorHTML.js']," +
+        "    TeX: { extensions: ['AMSmath.js','AMSsymbols.js','noErrors.js','noUndefined.js'], equationNumbers: { autoNumber: 'AMS' } }," +
+        "    jax: ['input/TeX','input/MathML','output/HTML-CSS']," +
+        "    extensions: ['tex2jax.js','mml2jax.js','MathMenu.js','MathZoom.js']," +
+        "    displayAlign: 'center'," +
+        "    displayIndent: '0em'," +
+        "    showMathMenu: true," +
+        "    tex2jax: { " +
+        "        inlineMath: [ ['$','$'] ], " +
+        "        displayMath: [ ['$$','$$'] ]," +
+        "        processEscapes: true," +
+        "        preview: 'TeX'," +
+        "    }, " +
+        "    'HTML-CSS': { " +
+        " linebreaks: { automatic: true, width: '95% container' }, " +
+        "        styles: { '.MathJax_Display, .MathJax .mo, .MathJax .mi, .MathJax .mn': {color: 'black ! important'} }" +
+        "    } " +
+        "}); ";
+    (document.body || document.getElementsByTagName('head')[0]).appendChild(mathjaxscript);
+}
+</script>
+
+  </div>
+  
+<div class="article-tag-list">
+<span class="label label-default">Tags</span>
+	<a href="/tag/jupyter-notebook/"><i class="fa fa-tag"></i>jupyter notebook</a>&nbsp;
+</div>  <hr />
+  <div class="well well-sm">  <!-- Social media sharing buttons -->
+
+    <!-- Google+ -->
+    <div class="g-plus" data-action="share" data-annotation="bubble"></div>
+    &nbsp;&nbsp;&nbsp;&nbsp;
+    <div class="g-plusone" data-size="medium"></div>&nbsp;
+
+    <!-- Facebook -->
+    <div class="fb-like" 
+        data-href="/meetup analysis.html" 
+        data-layout="button_count" 
+        data-action="like" data-show-faces="true" 
+        data-share="true">
+    </div>
+    &nbsp;
+  </div> <!-- /Social media sharing buttons -->
+</article>
+        </div><!-- /content -->
+
+        <div class="col-md-3 sidebar-nav" id="sidebar">
+
+<div class="row">
+
+<div class="col-xs-6 col-md-12">
+<h4><i class="fa fa-comment fa-fw fa-lg"></i> Social</h4>
+<ul class="list-unstyled social-links">
+    <li><a href="https://twitter.com/@TLihouma" target="_blank">
+	  <i class="fa fa-comments fa-fw fa-lg" title="Twitter"></i>
+		Twitter
+	</a></li>
+    <li><a href="http://linkedin.com/in/thierry-lihouma-3348421a" target="_blank">
+	  <i class="fa fa-comments fa-fw fa-lg" title="LinkedIn"></i>
+		LinkedIn
+	</a></li>
+    <li><a href="http://github.com/tlihouma" target="_blank">
+	  <i class="fa fa-comments fa-fw fa-lg" title="GitHub"></i>
+		GitHub
+	</a></li>
+</ul>
+</div>
+
+<div class="col-xs-6 col-md-12">
+<h4><i class="fa fa-folder fa-fw fa-lg"></i> Categories</h4>
+<ul class="list-unstyled category-links">
+  <li><a href="/" >
+    <i class="fa fa-folder-open fa-fw fa-lg"></i> projects</a></li>
+</ul>
+</div>
+
+</div> <!-- /row -->
+
+
+<h4><i class="fa fa-rss fa-fw fa-lg"></i> Feeds</h4>
+<ul class="list-unstyled">
+    <li><a href="/feeds/all.atom.xml" 
+		   type="application/atom+xml" rel="alternate">
+		<i class="fa fa-rss-square fa-fw fa-lg"></i> Atom Feed</a></li>
+</ul>
+
+<hr />
+
+        </div><!--/sidebar -->
+      </div><!--/row-->
+    </div><!--/.container /#main-container -->
+
+    <footer id="site-footer">
+ 
+      <address id="site-colophon">
+        <p class="text-center text-muted">
+        Site built using <a href="http://getpelican.com/" target="_blank">Pelican</a>
+        &nbsp;&bull;&nbsp; Theme based on
+        <a href="http://www.voidynullness.net/page/voidy-bootstrap-pelican-theme/"
+           target="_blank">VoidyBootstrap</a> by 
+        <a href="http://www.robertiwancz.com/"
+           target="_blank">RKI</a>  
+        </p>
+      </address><!-- /colophon  -->
+    </footer>
+
+
+    <!-- javascript -->
+   
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js" integrity="sha384-nvAa0+6Qg9clwYCGGPpDQLVpLNn0fRaROjHqs13t4Ggj3Ez50XnGQqc/r8MhnRDZ" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
+            integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
+            crossorigin="anonymous"></script>
+
+
+<!-- Facebook -->
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) return;
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/en_US/all.js#xfbml=1";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));
+</script>
+
+<!-- Twitter -->
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+
+<!-- Google+ -->
+<!-- Synchronous 
+<script type="text/javascript" src="https://apis.google.com/js/plusone.js"></script>
+-->
+<!-- Asynchronous -->
+<script type="text/javascript">
+  (function() {
+    var po = document.createElement('script'); po.type = 'text/javascript'; po.async = true;
+    po.src = 'https://apis.google.com/js/platform.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(po, s);
+  })();
+</script>  </body>
+</html>
